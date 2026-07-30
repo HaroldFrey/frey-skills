@@ -8,7 +8,7 @@
 
 | 分类 | Skill |
 |------|-------|
-| 🔧 执行型 | `pwd` `ls` `skills` `github-push` |
+| 🔧 执行型 | `pwd` `ls` `skills` `commit_push` |
 | 📋 预处理 | `req-analysis` |
 | 📊 分析型 | `full-review` `project-reader` |
 | 🧠 FPGA RTL | `verilog-sv-language` |
