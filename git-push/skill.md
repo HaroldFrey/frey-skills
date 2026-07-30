@@ -1,5 +1,5 @@
 ---
-name: commit_push
+name: git-push
 description: 将本地仓库推送到 GitHub。自动检测 git 仓库状态，生成 commit message，推送到远程仓库。首次推送提醒用户手动创建 GitHub 仓库。触发词：推送、推送代码、push、git push、github push、上传到GitHub、提交到GitHub。
 ---
 
