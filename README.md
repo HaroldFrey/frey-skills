@@ -8,7 +8,7 @@
 
 | 分类 | Skill |
 |------|-------|
-| 🔧 执行型 | `pwd` `ls` `skills` |
+| 🔧 执行型 | `pwd` `ls` `skills` `git-push` |
 | 📋 预处理 | `req-analysis` |
 | 📊 分析型 | `full-review` `project-reader` |
 | 🧠 FPGA RTL | `verilog-sv-language` |
@@ -21,7 +21,7 @@
 ## 🔧 执行型
 
 ### `/pwd`
-打印当前工作目录的完整路径。
+打印当前工作目录，同时列出 session 涉及的所有关键目录（配置目录、Skills 目录、工程目录）。
 
 ### `/ls`
 列出当前目录下所有文件和文件夹（含隐藏文件），按 📁 文件夹 / 📄 文件 分组，显示名称和修改时间。
