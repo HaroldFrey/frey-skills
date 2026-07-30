@@ -161,6 +161,8 @@
 ### `/skill-maker` 🆕
 **Skill 制作工作流**。根据用户描述创建自定义 skill，引导试用、反馈、迭代直到满意。
 
+制作前自动阅读 `skill-making-experience.md`（17+ skill 的经验技巧合集），避免踩坑。
+
 触发词：制作skill、创建skill、新建skill。
 
 | 阶段 | 说明 |
