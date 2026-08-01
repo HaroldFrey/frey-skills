@@ -1,6 +1,6 @@
 ---
 name: sv-dev-workflow
-description: Verilog/SystemVerilog 模块开发全流程管理：微架构设计→可综合 RTL 编码→语法解析（仅关键语法）→综合审查→问题追踪→迭代，交付后自动进入测试平台开发。支持 --auto 自动模式，支持多模块项目。内部调用 verilog-sv-language 和 vivado-synth。触发词：写模块、RTL设计、Verilog开发、SystemVerilog模块、FPGA模块开发、写testbench。
+description: Verilog/SystemVerilog 模块开发全流程管理：微架构设计→可综合 RTL 编码→语法解析（仅关键语法）→综合审查（verilog-sv-language 代码级 + full-review 补充维度）→问题追踪→迭代，交付后自动进入测试平台开发。支持 --auto 自动模式，支持多模块项目。内部调用 verilog-sv-language、full-review 和 vivado-synth。触发词：写模块、RTL设计、Verilog开发、SystemVerilog模块、FPGA模块开发、写testbench。
 ---
 
 # Verilog/SystemVerilog 模块开发全流程
@@ -91,12 +91,12 @@ mkdir -p rtl sim doc/rtl doc/sim
 
 ```
 Phase A: RTL
-  判断规模 → A0 需求分析 → A1 设计 → A2 编码+语法 → A3 审查 → A4 追踪 → A5 迭代 → A6 最终 → A7 检查
+  判断规模 → A0 需求分析 → A1 设计 → A2 编码+语法 → A3 审查(+full-review) → A4 追踪 → A5 迭代 → A6 最终 → A7 检查
                 ↑                                                          │
                 └────────── 用户修改需求时回到 A0 ──────────────────────────┘
     ↓ 交付
 Phase B: Testbench
-  B0 需求分析 → B1 设计 → B2 编码+语法 → B3 审查 → B4 追踪 → B5 迭代 → B6 最终 → B7 检查
+  B0 需求分析 → B1 设计 → B2 编码+语法 → B3 审查(+full-review) → B4 追踪 → B5 迭代 → B6 最终 → B7 检查
     ↓
   README
 ```
@@ -353,6 +353,8 @@ set_output_delay -clock clk 2.0 [get_ports m_axis_tdata*]
 
 ## A3. 综合审查 → `doc/rtl/审查报告_<模块名>.md`
 
+**步骤 1：代码级审查（调用 `verilog-sv-language`，保留）**
+
 | 维度 | 检查项 |
 |------|--------|
 | 可综合性 | initial/fork/#delay？ |
@@ -375,6 +377,20 @@ set_output_delay -clock clk 2.0 [get_ports m_axis_tdata*]
 | 时钟/复位一致 | 所有模块是否使用相同的时钟和复位方案？ |
 
 审查报告含"所属模块"列。
+
+**步骤 2：补充审查（调用 `full-review`，新增）**
+
+代码级审查通过后，调用 `full-review` 对本阶段产出做补充检查，侧重代码级审查不覆盖的维度：
+
+| 补充维度 | 检查项 |
+|---------|--------|
+| 文档一致性 | RTL ↔ 设计方案/需求分析（端口/FSM/参数/行数引用） |
+| 资源预估 | dist-RAM/BRAM 的 FF/LUT 消耗是否按综合实现核对 |
+| 测试覆盖缺口 | 数据内容比对是否有效（expected 数组是否被使用、计数器是否越界） |
+| 跨文件契约 | 生成脚本 ↔ 样本 RTL 一致性、文档 ↔ 代码参数一致 |
+| 错误处理 | 边界条件（空输入、超范围、超容量告警） |
+
+full-review 发现的问题写入同一份审查报告（标注来源为 full-review），并按其流程输出报告。
 
 🛑 检查点
 
@@ -420,6 +436,20 @@ RTL 完成后，编写 SystemVerilog 测试平台。**使用 SV 验证语法，�
 ---
 
 ## B3. 测试平台审查 → `doc/sim/审查报告_<模块名>.md`
+
+**步骤 1：代码级审查（保留）** — 检查 tb 逻辑、竞争条件、时钟复位、激励正确性、断言有效。
+
+**步骤 2：补充审查（调用 `full-review`，新增）** — 侧重：
+
+| 补充维度 | 检查项 |
+|---------|--------|
+| 覆盖缺口 | 数据内容比对是否有效（expected 是否被使用、计数器跨轮次是否越界） |
+| 文档一致性 | tb ↔ 测试方案/需求（场景覆盖、激励参数、预期结果） |
+| 协议监控 | 是否监控 APB 相位细节（PWRITE、PSEL/PENABLE 关系） |
+| 边界处理 | 背压等待是否依赖固定周期数（flaky 风险） |
+
+🛑 检查点
+
 ## B4. 问题追踪 → `doc/sim/问题追踪_<模块名>.md`
 ## B5. 迭代（从 B1 开始）
 ## B6. 最终审查 → `doc/sim/最终报告_<模块名>.md`
@@ -440,8 +470,9 @@ RTL 完成后，编写 SystemVerilog 测试平台。**使用 SV 验证语法，�
 | 阶段 | 调用 |
 |------|------|
 | A2 编码 | `verilog-sv-language` |
-| A3 审查 | `verilog-sv-language` |
+| A3 审查 | `verilog-sv-language`（代码级）+ `full-review`（补充维度） |
 | A6 最终 | `vivado-synth` |
+| B3 审查 | `full-review`（补充维度） |
 
 ---
 
