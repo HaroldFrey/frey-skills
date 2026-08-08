@@ -155,11 +155,11 @@
 > ⚠️ 需求确认阶段无论手动/自动都必须人工确认。📂 示例见 `bash-dev-workflow/examples/bash-test/`
 
 ### `/sv-dev-workflow`
-**Verilog/SystemVerilog 模块开发全流程管理**。Phase A(RTL)+Phase B(Testbench) 两阶段，支持多模块项目。
+**Verilog/SystemVerilog 模块开发全流程管理**。Phase A(RTL) + Phase B(Testbench) + Phase C(仿真验证循环) 三阶段，支持多模块项目。Phase C 用 iverilog 编译仿真 + VCD 波形分析脚本（Python 标准库）+ gtkwave 定位，发现问题按四分类回退（方案设计/编码/TB与脚本/工具兼容），C5 全面检查通过后结束。
 
 支持 `--auto` 自动模式和手动模式。
 
-**内部调用**：`/verilog-sv-language`（编码+审查） | `/vivado-synth`（最终审查） | `/req-analysis`（A0/B0 需求分析逻辑相同）
+**内部调用**：`/verilog-sv-language`（编码+审查） | `/vivado-synth`（最终审查） | `/req-analysis`（A0/B0 需求分析逻辑相同） | 仿真验证(Phase C)用外部工具 iverilog / gtkwave + Python 标准库
 
 | 模式 | 触发 |
 |------|------|
@@ -204,6 +204,7 @@
 │
 ├── /sv-dev-workflow    ──→ 编码时调用 /verilog-sv-language
 │                       ──→ 最终审查时调用 /vivado-synth
+│                       ──→ 仿真验证(Phase C)用外部工具 iverilog/gtkwave + Python
 │
 ├── /full-review        ──→ Bash 项目调用 /bash-defensive-patterns
 │                       ──→ Verilog 项目调用 /verilog-sv-language + /vivado-synth
