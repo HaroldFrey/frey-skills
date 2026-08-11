@@ -9,6 +9,33 @@ description: 检查远程仓库是否有更新，有则自动同步到本地。�
 
 ---
 
+## 步骤 0：代理探测（所有 git 网络操作前自动执行）
+
+执行任何 git 网络操作（fetch / pull）前，先探测当前代理状态，**不修改全局 git 配置**（用临时参数）：
+
+1. **读取系统代理设置**（⚠️ 在 Git Bash 中不能带 `/v` 参数——会被 MSYS 路径转换破坏，用全量查询 + grep）：
+   ```bash
+   reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" | grep -i "ProxyServer"
+   ```
+   - 输出形如 `    ProxyServer    REG_SZ    127.0.0.1:7890`（当前代理地址，可能随代理软件变化）
+   - 若 `ProxyEnable` 为 0 或读取失败 → 视为无代理
+
+2. **探测代理端口是否可用**：
+   ```bash
+   (echo > /dev/tcp/127.0.0.1/<端口>) 2>/dev/null && echo "代理可用" || echo "代理不可用"
+   ```
+
+3. **按探测结果执行 git 操作**：
+   - **代理可用** → 用临时参数（不改全局配置）：
+     ```bash
+     git -c http.proxy=http://<代理地址> -c https.proxy=http://<代理地址> <git操作>
+     ```
+   - **代理不可用 / 未设置** → 直接执行 git 操作（直连）
+
+> 💡 这样代理开/关/换端口都自适应：代理开着自动走代理（地址实时从系统读取），代理关了自动直连，无需手动改任何配置。
+
+---
+
 ## 参数
 
 | 参数 | 说明 |
