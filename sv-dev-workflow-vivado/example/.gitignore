@@ -13,3 +13,4 @@ xsim.dir/
 *.pb
 *.xsim
 webtalk*
+__pycache__/
