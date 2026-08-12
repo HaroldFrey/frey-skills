@@ -517,9 +517,11 @@ RTL 完成后，编写 SystemVerilog 测试平台。**使用 SV 验证语法，�
 ## C0. 环境与脚本准备
 
 1. 检查工具链：`vivado` / `make` / `python`（缺失先提示安装）
-   - **工具路径不得假设**：示例脚本中写死的路径（如 `D:\App_install_Lcoation\Vivado201902\...`）
-     仅是示例——实际使用时先查找（`which vivado`、常见安装目录、询问用户），
-     **查找不到必须询问用户**，不得猜测路径继续执行
+   - **工具路径优先参考实测工程**：`D:\FPGA_Self_Stduy\14_AXI_FULL_Master_With_USER_Port_0522` 的
+     Makefile/scripts 为实测可用配置（Vivado 2019.2、Python 3.12、make、器件 xc7z020clg400-2），
+     直接按其路径配置；示例脚本（`D:\App_install_Lcoation\Vivado201902\...`）仅作格式参考
+   - 参考工程路径不可用时，才使用 `which vivado` / 常见安装目录查找
+   - **查找不到必须询问用户**，不得猜测路径继续执行
 2. 从 `example/`（或已有工程）复制自动化脚本到工作目录：
    - `Makefile`（project/sim/check/synth/all/clean 六个目标）
    - `scripts/*.tcl`（project / add_sources / sim / check_vcd / synth）
@@ -676,4 +678,4 @@ RTL ↔ 设计方案 ↔ TB ↔ sim 文档 ↔ 接口一致 ↔ README
 13. **RTL 问题默认回退方案设计**：方案有必要修改 → 更新设计方案后从 A1 重新推进；方案无需修改 → 才进入代码编写（A2）
 14. **工具兼容问题就地绕过**（Vivado 限制，见 C3 已知问题清单），记录到问题追踪，不改设计
 15. **C 阶段每轮循环落盘验证报告，C6 全面检查通过后 C 阶段才结束**（仿真通过 ≠ 完成，还必须综合验证通过）
-16. **工具路径不得假设**：示例脚本路径仅是示例，实际使用先查找，查找不到询问用户
+16. **工具路径优先参考实测工程**：参考 `D:\FPGA_Self_Stduy\14_AXI_FULL_Master_With_USER_Port_0522` 的实测配置（Vivado/Python/make/器件），启动不了再查找，查找不到询问用户
