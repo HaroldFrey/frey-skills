@@ -1,0 +1,15 @@
+# Vivado 自动化流程产物 (make 生成, 可随时重建)
+log/
+make_run/
+vivado_prj/
+sim_run/
+synth_run/
+xsim.dir/
+.Xil/
+*.log
+*.jou
+*.vcd
+*.wdb
+*.pb
+*.xsim
+webtalk*

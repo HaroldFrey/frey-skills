@@ -14,7 +14,7 @@
 | 🧠 FPGA RTL | `verilog-sv-language` |
 | 🧠 FPGA 工具链 | `vivado-tcl` `vivado-synth` `vivado-analysis` |
 | 🧠 脚本工程化 | `bash-defensive-patterns` `makefile-patterns` |
-| 🔄 编排型 | `bash-dev-workflow` `sv-dev-workflow` `skill-maker` `project-evolution` |
+| 🔄 编排型 | `bash-dev-workflow` `sv-dev-workflow` `sv-dev-workflow-vivado` `skill-maker` `project-evolution` |
 
 ---
 
@@ -185,6 +185,22 @@
 
 > ⚠️ A0/B0 需求确认阶段无论手动/自动都必须人工确认。
 
+### `/sv-dev-workflow-vivado`
+**Verilog/SystemVerilog 模块开发全流程管理（Vivado 版）**。Phase A(RTL) + Phase B(Testbench) + Phase C(仿真验证循环) 三阶段，支持多模块项目。Phase C 用 **Vivado 自动化流程**（make + tcl：建工程→xvlog/xelab/xsim→VCD 检查）+ GTKWave/WaveTrace 定位 + **综合验证**（能发现仿真盲区问题，如 multi-driven），发现问题按四分类回退。仿真与综合全部通过后 C6 全面检查结束。
+
+与 `/sv-dev-workflow` 的区别：仿真工具链从 iverilog 换成 **Vivado**（xsim 支持完整 SV 验证语法），并新增**综合验证**步骤（C5）。
+
+支持 `--auto` 自动模式和手动模式。
+
+**内部调用**：`/verilog-sv-language`（编码+审查） | `/vivado-synth`（最终审查） | `/req-analysis`（A0/B0 需求分析逻辑相同） | Phase C 用自动化脚本（make + tcl，示例见 `sv-dev-workflow-vivado/example/`）
+
+| 模式 | 触发 |
+|------|------|
+| 🔧 手动（默认） | 不指定 |
+| 🤖 自动 | `--auto` / "自动" / "全自动" |
+
+> ⚠️ A0/B0 需求确认阶段无论手动/自动都必须人工确认。工具路径不得假设（示例路径仅示意，查找不到询问用户）。
+
 ### `/skill-maker` 🆕
 **Skill 制作工作流**。根据用户描述创建自定义 skill，引导试用、反馈、迭代直到满意。
 
@@ -223,6 +239,11 @@
 │                       ──→ 最终审查时调用 /vivado-synth
 │                       ──→ 仿真验证(Phase C)用外部工具 iverilog/gtkwave + Python
 │
+├── /sv-dev-workflow-vivado
+│                       ──→ 编码时调用 /verilog-sv-language
+│                       ──→ 最终审查时调用 /vivado-synth
+│                       ──→ 仿真与综合(Phase C)用 make + tcl 自动化脚本 + Python
+│
 ├── /full-review        ──→ Bash 项目调用 /bash-defensive-patterns
 │                       ──→ Verilog 项目调用 /verilog-sv-language + /vivado-synth
 │
@@ -236,6 +257,8 @@
 | `bash-dev-workflow` | `bash-defensive-patterns` | 编码阶段 |
 | `sv-dev-workflow` | `verilog-sv-language` | 编码(A2) + 审查(A3) |
 | `sv-dev-workflow` | `vivado-synth` | 最终审查(A6) |
+| `sv-dev-workflow-vivado` | `verilog-sv-language` | 编码(A2) + 审查(A3) |
+| `sv-dev-workflow-vivado` | `vivado-synth` | 最终审查(A6) |
 | `full-review` | `bash-defensive-patterns` | Bash 项目审查 |
 | `full-review` | `verilog-sv-language` + `vivado-synth` | Verilog 项目审查 |
 | `project-reader` | `bash-defensive-patterns` | Bash 项目分析 |
