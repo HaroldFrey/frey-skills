@@ -65,6 +65,14 @@ example/
 
 ## 环境要求
 
-- Vivado 2019.2+（Windows，batch 模式）
-- GNU make（Windows 免安装版即可）
-- Python 3（check 步骤用，标准库足够）
+本 example 中的工具路径为**实测可用配置**（2026-08-12 FIFO_EX 项目完整走通验证），直接复制使用：
+
+| 工具 | 实测路径 | 启动方式 |
+|------|---------|---------|
+| Vivado 2019.2 | `D:/App_install_Lcoation/Vivado201902/Vivado/2019.2/bin/vivado.bat` | `vivado.bat -mode batch -notrace -source <脚本>` |
+| Python 3.12 | `D:/App_install_Lcoation/python/python.exe` | `python.exe -X utf8 sim/check_vcd.py <vcd>`（`-X utf8` 强制 UTF-8 输出防乱码） |
+| GNU make | `D:\App_install_Lcoation\make\bin\make.exe`（已加入 PATH） | `make sim/check/synth` |
+
+器件型号：`xc7z020clg400-2`（Zynq-7020）。
+
+> 若你的环境不同（Vivado 版本或安装位置变化），才需要修改 `Makefile` 与 `scripts/project.tcl` 中的路径；查找不到时询问用户，不要猜测路径。

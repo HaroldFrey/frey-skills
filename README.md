@@ -199,7 +199,7 @@
 | 🔧 手动（默认） | 不指定 |
 | 🤖 自动 | `--auto` / "自动" / "全自动" |
 
-> ⚠️ A0/B0 需求确认阶段无论手动/自动都必须人工确认。**工具路径优先参考实测工程**：`D:\FPGA_Self_Stduy\14_AXI_FULL_Master_With_USER_Port_0522`（Vivado 2019.2 / Python 3.12 / make / xc7z020clg400-2，2026-08-12 于 FIFO_EX 项目实测），启动不了再查找，查找不到询问用户。
+> ⚠️ A0/B0 需求确认阶段无论手动/自动都必须人工确认。**工具路径以 `example/` 为实测模板**：Makefile/project.tcl 已固化实测路径（Vivado 2019.2 / Python 3.12 / make / xc7z020clg400-2，2026-08-12 FIFO_EX 项目验证），直接复制使用；环境不同才查找，查找不到询问用户。
 
 ### `/skill-maker` 🆕
 **Skill 制作工作流**。根据用户描述创建自定义 skill，引导试用、反馈、迭代直到满意。

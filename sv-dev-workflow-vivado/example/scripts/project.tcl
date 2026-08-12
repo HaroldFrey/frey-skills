@@ -19,8 +19,8 @@ fconfigure stdout -encoding utf-8
 #------------------------------------------------------------------------------
 set ::prj_name "axi_wr_example"     ;# [MODIFY] 工程名
 set ::prj_dir  "vivado_prj"
-set ::prj_part "xc7z020clg400-2"  ;# [MODIFY] 器件型号
-# 工具路径 (免安装版, 供 check_vcd.tcl 等调用)
+set ::prj_part "xc7z020clg400-2"  ;# 实测器件型号 (Zynq-7020, 2026-08-12 验证), 环境不同才改
+# 工具路径 (实测可用: Python 3.12, 2026-08-12 FIFO_EX 项目验证, 供 check_vcd.tcl 等调用)
 set ::python_exe "D:/App_install_Lcoation/python/python.exe"
 
 #------------------------------------------------------------------------------

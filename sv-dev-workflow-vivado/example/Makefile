@@ -9,11 +9,11 @@
 #   make all       # 全流程: project → sim → synth → check (不执行 clean)
 #   make clean     # 删除日志目录与所有输出产物 (工程/仿真/综合/波形)
 #
-# 前提 (工具路径为示例, 请按你的环境修改 [MODIFY]):
-#   - make 可用 (D:\App_install_Lcoation\make\bin\make.exe)
-#   - Vivado (D:\App_install_Lcoation\Vivado201902\Vivado\2019.2)
-#   - make 可用 (已加入 PATH: D:\App_install_Lcoation\make\bin\make.exe)
-#   - Vivado 2019.2 (D:\App_install_Lcoation\Vivado201902)
+# 前提 (下方路径为实测可用配置, 2026-08-12 FIFO_EX 项目验证, 直接使用):
+#   - make: D:\App_install_Lcoation\make\bin\make.exe (已加入 PATH)
+#   - Vivado 2019.2: D:\App_install_Lcoation\Vivado201902\Vivado\2019.2\bin\vivado.bat
+#   - Python 3.12:  D:\App_install_Lcoation\python\python.exe
+#   若你的环境不同 (版本/安装位置变化), 才需修改下方 [路径] 配置
 #
 # 脚本分层:
 #   project.tcl      工程创建 (幂等) — 工程名/器件型号配置中心
