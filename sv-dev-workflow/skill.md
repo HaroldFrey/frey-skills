@@ -117,6 +117,8 @@ Phase C: 仿真验证循环（大阶段）
 
 ## A0. 需求分析（REQUIREMENTS）🆕
 
+> 📖 **经验库**：`../project-experiences/Register-Config-Module.md` §1 架构抽象 + §7 决策抽象（通用原则，直接复用）
+
 > **需求没搞清楚之前，绝对禁止进入设计阶段。**
 
 ### AI 需要做的事
@@ -310,6 +312,8 @@ set_output_delay -clock clk 2.0 [get_ports m_axis_tdata*]
 
 ## A2. RTL 编码 + 语法解析 → `rtl/*.sv` + `doc/rtl/语法解析_<模块名>.md`
 
+> 📖 **经验库**：`../project-experiences/Register-Config-Module.md` §3 编程风格红线 + §4 状态机抽象（违反红线即返工）
+
 ### 单模块
 
 1. 加载 `verilog-sv-language`
@@ -447,6 +451,8 @@ RTL 完成后，编写 SystemVerilog 测试平台。**使用 SV 验证语法，�
 
 ## B0. 测试需求分析 🆕（规则同 A0）→ `doc/sim/需求分析_<模块名>.md`
 
+> 📖 **经验库**：`../project-experiences/Register-Config-Module.md` §3 风格红线 + §6 验证方法论（陷阱清单）
+
 🛑 检查点
 
 ---
@@ -512,6 +518,8 @@ RTL 完成后，编写 SystemVerilog 测试平台。**使用 SV 验证语法，�
 ---
 
 ## C0. 环境与脚本准备
+
+> 📖 **经验库**：`../project-experiences/Register-Config-Module.md` §6 验证方法论 + §9 交付循环
 
 1. 检查工具链：`iverilog` / `vvp` / `gtkwave` / `python`（缺失先提示安装）
 2. 若 `sim/` 下没有 VCD 分析脚本（如 `check_vcd.py`），先编写：
@@ -631,3 +639,9 @@ RTL ↔ 设计方案 ↔ TB ↔ sim 文档 ↔ 接口一致 ↔ README
 13. **RTL 问题默认回退方案设计**：方案有必要修改 → 更新设计方案后从 A1 重新推进；方案无需修改 → 才进入代码编写（A2）
 14. **工具兼容问题就地绕过**（iverilog 限制），记录到问题追踪，不改设计
 15. **C 阶段每轮循环落盘验证报告，C5 全面检查通过后 C 阶段才结束**
+
+## 项目经验库
+
+> 各项目抽象出的**通用开发原则**（架构模式、风格红线、状态机要点、生成器模式、验证方法论、资源评估、否决记录）存放在共享目录 `../project-experiences/`（skills 根下的普通资料目录，非 skill）。**新项目各阶段开始前先读对应小节**（引用位置见各阶段开头 📖 标注），直接复用已验证的做法、避免重复踩坑。
+>
+> - `../project-experiences/Register-Config-Module.md` — RTL 开发通用经验（抽象原则，源自寄存器配置模块项目）
